@@ -39,25 +39,40 @@ const ImagesScreen = ({ route, navigation }) => {
   }, []);
 
   return (
-    <ImageBackground source={require("../assets/bg.jpg")} style={styles.image}>
+    <View style={{ backgroundColor: "#131313" }}>
       <View style={styles.feed}>
         <FlatList
           data={images}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <Image
-              style={styles.tinyLogo}
-              source={{
-                uri: item.img_src,
-              }}
-            />
+            <View style={{ width: "100%" }}>
+              <Image
+                style={styles.tinyLogo}
+                source={{
+                  uri: item.img_src,
+                }}
+              />
+              <View style={styles.infoContainer}>
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={styles.rootTextHeading}>Earth Date:</Text>
+                  <Text style={styles.rootTextContent}>{item.earth_date}</Text>
+                </View>
+
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={styles.rootTextHeading}>Camera Name:</Text>
+                  <Text style={styles.rootTextContent}>
+                    {item.camera.full_name}
+                  </Text>
+                </View>
+              </View>
+            </View>
           )}
         />
 
         {/* {images.map((image, index) => (
           ))} */}
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 
@@ -68,6 +83,21 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 1,
     resizeMode: "contain",
+  },
+  rootTextHeading: {
+    color: "white",
+  },
+
+  rootTextContent: {
+    color: "white",
+    marginLeft: 10,
+  },
+  infoContainer: {
+    width: "100%",
+    borderBottomWidth: 2,
+    borderBottomColor: "lightgrey",
+    padding: 15,
+    justifyContent: "space-between",
   },
   feed: {
     width: "100%",
