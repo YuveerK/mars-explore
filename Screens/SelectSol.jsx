@@ -10,6 +10,8 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import TypeWriter from "react-native-typewriter";
+import { AntDesign } from "@expo/vector-icons";
 
 const SelectSol = ({ route, navigation }) => {
   const roverName = route.params.rover;
@@ -21,6 +23,7 @@ const SelectSol = ({ route, navigation }) => {
   const [number, onChangeNumber] = useState(null);
   const [click, setClick] = useState(null);
   const [clicked, setClicked] = useState(false);
+  const [menuClick, setMenuClick] = useState(false);
 
   const getImage = (roverName) => {
     if (roverName === "Curiosity") {
@@ -42,15 +45,18 @@ const SelectSol = ({ route, navigation }) => {
     setClick(index);
     setCameraName(cameraName);
   };
-  console.log(number);
+
+  const toggleMenu = () => {
+    setMenuClick(!menuClick);
+  };
   return (
     <View style={{ backgroundColor: "black" }}>
       <ScrollView>
         <View style={styles.container}>
           <View style={{ width: "100%", alignItems: "center", padding: 15 }}>
-            <Text style={styles.title}>
+            <TypeWriter typing={1} style={styles.title}>
               You have selected the {roverName} rover{" "}
-            </Text>
+            </TypeWriter>
           </View>
           <Image style={styles.rover} source={getImage(roverName)} />
 
@@ -73,27 +79,52 @@ const SelectSol = ({ route, navigation }) => {
 
           <View style={styles.cameraContainer}>
             <View style={styles.cameraHeadingsContainer}>
-              <Text style={styles.headings}>Camera Details</Text>
-              <Text style={{ marginLeft: 15, color: "white" }}>
-                Please select a camera
-              </Text>
+              <View>
+                <Text style={styles.headings}>Camera Details</Text>
+                <Text style={{ marginLeft: 15, color: "white" }}>
+                  Please select a camera (Optional)
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => toggleMenu()}>
+                {menuClick === false ? (
+                  <AntDesign
+                    name="down"
+                    size={24}
+                    color="white"
+                    style={{ marginRight: 15 }}
+                  />
+                ) : (
+                  <AntDesign
+                    name="up"
+                    size={24}
+                    color="black"
+                    color="white"
+                    style={{ marginRight: 15 }}
+                  />
+                )}
+              </TouchableOpacity>
             </View>
-            <View style={styles.cameras}>
-              {roverCameras.map((camera, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => getPictures(index, camera.name)}
-                  style={
-                    click === index && clicked
-                      ? styles.cameraContentClicked
-                      : styles.cameraContentUnclicked
-                  }
-                >
-                  <Text style={styles.rootTextStyles}>{camera.full_name}</Text>
-                  <Text style={styles.rootTextStyles}>{camera.name}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+
+            {menuClick && (
+              <View style={styles.cameras}>
+                {roverCameras.map((camera, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => getPictures(index, camera.name)}
+                    style={
+                      click === index && clicked
+                        ? styles.cameraContentClicked
+                        : styles.cameraContentUnclicked
+                    }
+                  >
+                    <Text style={styles.rootTextStyles}>
+                      {camera.full_name}
+                    </Text>
+                    <Text style={styles.rootTextStyles}>{camera.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -131,7 +162,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
 
     backgroundColor: "#00493d",
-    padding: 30,
+    padding: 10,
     position: "absolute",
     bottom: 0,
   },
@@ -147,6 +178,10 @@ const styles = StyleSheet.create({
     borderBottomColor: "#00493d",
     borderBottomWidth: 2,
     backgroundColor: "rgba(0, 73, 61, 0.4)",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   cameraHeadings: {
     width: "100%",

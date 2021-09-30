@@ -4,7 +4,9 @@ import {
   Text,
   View,
   ImageBackground,
+  Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 
 const RoverScreen = ({ navigation }) => {
@@ -42,9 +44,26 @@ const RoverScreen = ({ navigation }) => {
       cameras: roverCameras,
     });
   };
+
+  const getImage = (roversName) => {
+    if (roversName === "Curiosity") {
+      return require("../assets/Curiosity.jpg");
+    }
+    if (roversName === "Spirit") {
+      return require("../assets/Spirit.jpg");
+    }
+    if (roversName === "Opportunity") {
+      return require("../assets/Opportunity.jpg");
+    }
+    if (roversName === "Perseverance") {
+      return require("../assets/Perseverance.jpg");
+    }
+  };
+
+  console.log(rovers);
   return (
     <ImageBackground source={require("../assets/bg.jpg")} style={styles.image}>
-      <View style={styles.container}>
+      <ScrollView>
         <View style={styles.roverContainer}>
           {rovers.length > 0 ? (
             rovers.map((rover, index) => (
@@ -53,21 +72,80 @@ const RoverScreen = ({ navigation }) => {
                 onPress={() =>
                   select(index, rover.name, rover.max_sol, rover.cameras)
                 }
+                style={
+                  click === index ? styles.clickedBox : styles.unclickedBox
+                }
               >
                 <Text
-                  style={
-                    click === index ? styles.clickedBox : styles.unclickedBox
-                  }
+                  style={{
+                    color: "white",
+                    fontSize: 30,
+                    width: "100%",
+                    padding: 15,
+                    backgroundColor: "rgba(0, 73, 61, 0.7)",
+                  }}
                 >
                   {rover.name}
                 </Text>
+
+                <Image style={styles.rover} source={getImage(rover.name)} />
+
+                <View
+                  style={{
+                    width: "100%",
+                    backgroundColor: "rgba(0, 73, 61, 0.7)",
+                  }}
+                >
+                  <View style={styles.ContentView}>
+                    <Text style={styles.contentTitle}>Landing Date:</Text>
+
+                    <Text style={styles.contentDescription}>
+                      {rover.landing_date}
+                    </Text>
+                  </View>
+                  <View style={styles.ContentView}>
+                    <Text style={styles.contentTitle}>Launch Date:</Text>
+
+                    <Text style={styles.contentDescription}>
+                      {rover.launch_date}
+                    </Text>
+                  </View>
+                  <View style={styles.ContentView}>
+                    <Text style={styles.contentTitle}>Status:</Text>
+
+                    <Text style={styles.contentDescription}>
+                      {rover.status}
+                    </Text>
+                  </View>
+                  <View style={styles.ContentView}>
+                    <Text style={styles.contentTitle}>Max Sol:</Text>
+
+                    <Text style={styles.contentDescription}>
+                      {rover.max_sol}
+                    </Text>
+                  </View>
+                  <View style={styles.ContentView}>
+                    <Text style={styles.contentTitle}>Latest Date:</Text>
+
+                    <Text style={styles.contentDescription}>
+                      {rover.max_date}
+                    </Text>
+                  </View>
+                  <View style={styles.ContentView}>
+                    <Text style={styles.contentTitle}>Total Photos:</Text>
+
+                    <Text style={styles.contentDescription}>
+                      {rover.total_photos}
+                    </Text>
+                  </View>
+                </View>
               </TouchableOpacity>
             ))
           ) : (
             <Text style={styles.loading}>Loading...</Text>
           )}
         </View>
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 };
@@ -79,6 +157,25 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 1,
     resizeMode: "contain",
+  },
+  ContentView: {
+    flexDirection: "row",
+    width: "100%",
+    padding: 5,
+  },
+  contentTitle: {
+    color: "white",
+    fontSize: 15,
+  },
+  contentDescription: {
+    color: "white",
+    fontSize: 15,
+    marginLeft: 10,
+  },
+  rover: {
+    width: "100%",
+    height: 400,
+    resizeMode: "cover",
   },
   loading: {
     color: "white",
@@ -93,12 +190,12 @@ const styles = StyleSheet.create({
   },
   roverContainer: {
     width: "100%",
+    padding: 15,
   },
   unclickedBox: {
     width: "100%",
     fontSize: 30,
     color: "white",
-    padding: 20,
     marginVertical: 15,
     borderColor: "#00493d",
     borderWidth: 5,
@@ -109,7 +206,6 @@ const styles = StyleSheet.create({
     width: "100%",
     fontSize: 30,
     color: "white",
-    padding: 20,
     marginVertical: 15,
     borderColor: "#00977e",
     borderWidth: 10,
