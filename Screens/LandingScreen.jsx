@@ -16,7 +16,6 @@ const LandingScreen = ({ navigation }) => {
     >
       <View style={styles.headingContainer}>
         <Text style={styles.mainHeading}>Mars Explorer</Text>
-        <Text style={styles.subHeading}>Discover footage taken from Mars!</Text>
       </View>
 
       <View style={styles.button}>

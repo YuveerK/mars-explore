@@ -19,7 +19,6 @@ const ImagesScreen = ({ route, navigation }) => {
     ? `https://api.nasa.gov/mars-photos/api/v1/rovers/${roverName}/photos?api_key=${API_KEY}&sol=${solDays}&camera=${cameraName}`
     : `https://api.nasa.gov/mars-photos/api/v1/rovers/${roverName}/photos?api_key=${API_KEY}&sol=${solDays}`;
 
-  console.log(ImageURL);
   //state
   const [images, setImages] = useState([]);
 
@@ -31,48 +30,76 @@ const ImagesScreen = ({ route, navigation }) => {
           try {
             setImages(data.photos);
           } catch (error) {
-            setImages([]);
+            console.log(error);
           }
         });
     };
     getImages();
+    checkIfEmpty();
   }, []);
 
+  const checkIfEmpty = () => {
+    if (images?.length === 0) {
+      setImages(null);
+    }
+  };
+  console.log(images);
   return (
-    <View style={{ backgroundColor: "#131313" }}>
+    <ImageBackground source={require("../assets/bg.jpg")} style={styles.image}>
       <View style={styles.feed}>
-        <FlatList
-          data={images}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={{ width: "100%" }}>
-              <Image
-                style={styles.tinyLogo}
-                source={{
-                  uri: item.img_src,
-                }}
-              />
-              <View style={styles.infoContainer}>
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={styles.rootTextHeading}>Earth Date:</Text>
-                  <Text style={styles.rootTextContent}>{item.earth_date}</Text>
-                </View>
+        {images?.length > 0 && (
+          <FlatList
+            data={images}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  width: "100%",
+                  backgroundColor: "rgba(0, 73, 61, 0.4)",
 
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={styles.rootTextHeading}>Camera Name:</Text>
-                  <Text style={styles.rootTextContent}>
-                    {item.camera.full_name}
-                  </Text>
+                  marginVertical: 15,
+                }}
+              >
+                <Image
+                  style={styles.tinyLogo}
+                  source={{
+                    uri: item.img_src,
+                  }}
+                />
+                <View style={styles.infoContainer}>
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={styles.rootTextHeading}>Earth Date:</Text>
+                    <Text style={styles.rootTextContent}>
+                      {item.earth_date}
+                    </Text>
+                  </View>
+
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={styles.rootTextHeading}>Camera Name:</Text>
+                    <Text style={styles.rootTextContent}>
+                      {item.camera.full_name}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
-          )}
-        />
-
-        {/* {images.map((image, index) => (
-          ))} */}
+            )}
+          />
+        )}
       </View>
-    </View>
+      {images === null ? (
+        <View
+          style={{ width: "100%", height: "100%", backgroundColor: "black" }}
+        >
+          <Text style={{ color: "white", fontSize: 60 }}>Loading</Text>
+        </View>
+      ) : (
+        <View
+          style={{ width: "100%", height: "100%", backgroundColor: "black" }}
+        >
+          <Text style={{ color: "white", fontSize: 60 }}>No images</Text>
+        </View>
+      )}
+    </ImageBackground>
   );
 };
 
@@ -82,7 +109,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     flex: 1,
-    resizeMode: "contain",
+    resizeMode: "cover",
   },
   rootTextHeading: {
     color: "white",
@@ -94,8 +121,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     width: "100%",
-    borderBottomWidth: 2,
-    borderBottomColor: "lightgrey",
+
     padding: 15,
     justifyContent: "space-between",
   },
@@ -106,6 +132,5 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: "100%",
     height: 500,
-    marginVertical: 20,
   },
 });

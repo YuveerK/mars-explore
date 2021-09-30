@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mars-explore",
-    "slug": "mars-explore",
+    "name": "Mars Explorer",
+    "slug": "mars-explorer",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,6 +27,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "An app where you can view all the latest images captured from all the Rovers that have or are on Mars."
   }
 }

@@ -60,7 +60,6 @@ const RoverScreen = ({ navigation }) => {
     }
   };
 
-  console.log(rovers);
   return (
     <ImageBackground source={require("../assets/bg.jpg")} style={styles.image}>
       <ScrollView>
@@ -190,14 +189,14 @@ const styles = StyleSheet.create({
   },
   roverContainer: {
     width: "100%",
-    padding: 15,
   },
   unclickedBox: {
     width: "100%",
     fontSize: 30,
     color: "white",
     marginVertical: 15,
-    borderColor: "#00493d",
+    borderTopColor: "#00493d",
+    borderBottomColor: "#00493d",
     borderWidth: 5,
     alignItems: "center",
     justifyContent: "center",
@@ -207,7 +206,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "white",
     marginVertical: 15,
-    borderColor: "#00977e",
+    borderTopColor: "#00493d",
+    borderBottomColor: "#00493d",
     borderWidth: 10,
     alignItems: "center",
     justifyContent: "center",

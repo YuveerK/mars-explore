@@ -78,14 +78,17 @@ const SelectSol = ({ route, navigation }) => {
           </View>
 
           <View style={styles.cameraContainer}>
-            <View style={styles.cameraHeadingsContainer}>
+            <TouchableOpacity
+              onPress={() => toggleMenu()}
+              style={styles.cameraHeadingsContainer}
+            >
               <View>
                 <Text style={styles.headings}>Camera Details</Text>
                 <Text style={{ marginLeft: 15, color: "white" }}>
                   Please select a camera (Optional)
                 </Text>
               </View>
-              <TouchableOpacity onPress={() => toggleMenu()}>
+              <View>
                 {menuClick === false ? (
                   <AntDesign
                     name="down"
@@ -102,8 +105,8 @@ const SelectSol = ({ route, navigation }) => {
                     style={{ marginRight: 15 }}
                   />
                 )}
-              </TouchableOpacity>
-            </View>
+              </View>
+            </TouchableOpacity>
 
             {menuClick && (
               <View style={styles.cameras}>

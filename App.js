@@ -26,7 +26,7 @@ export default function App() {
           component={RoverScreen}
           options={{
             headerStyle: {
-              backgroundColor: "#000000",
+              backgroundColor: "rgba(0, 73, 61, 1)",
             },
             headerTintColor: "white",
             headerTitleStyle: {
@@ -40,7 +40,7 @@ export default function App() {
           component={SelectSol}
           options={{
             headerStyle: {
-              backgroundColor: "#000000",
+              backgroundColor: "rgba(0, 73, 61, 1)",
             },
             headerTintColor: "white",
             headerTitleStyle: {
@@ -54,7 +54,7 @@ export default function App() {
           component={ImagesScreen}
           options={{
             headerStyle: {
-              backgroundColor: "#000000",
+              backgroundColor: "rgba(0, 73, 61, 1)",
             },
             headerTintColor: "white",
             headerTitleStyle: {
