@@ -96,7 +96,20 @@ const ImagesScreen = ({ route, navigation }) => {
         <View
           style={{ width: "100%", height: "100%", backgroundColor: "black" }}
         >
-          <Text style={{ color: "white", fontSize: 60 }}>No images</Text>
+          <Image
+            source={require("../assets/error.png")}
+            style={{ width: "100%", height: 400 }}
+          />
+          <Text
+            style={{
+              color: "white",
+              width: "100%",
+              textAlign: "center",
+              fontSize: 30,
+            }}
+          >
+            Could not find any images. Please select a different camera
+          </Text>
         </View>
       )}
     </ImageBackground>

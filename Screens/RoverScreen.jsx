@@ -141,7 +141,23 @@ const RoverScreen = ({ navigation }) => {
               </TouchableOpacity>
             ))
           ) : (
-            <Text style={styles.loading}>Loading...</Text>
+            <View
+              style={{
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Image
+                source={require("../assets/rover-loading.png")}
+                style={{
+                  width: "80%",
+                  height: 400,
+                  resizeMode: "contain",
+                }}
+              />
+              <Text style={styles.loading}>Loading...</Text>
+            </View>
           )}
         </View>
       </ScrollView>
@@ -178,6 +194,7 @@ const styles = StyleSheet.create({
   },
   loading: {
     color: "white",
+    fontSize: 30,
   },
   container: {
     width: "100%",
