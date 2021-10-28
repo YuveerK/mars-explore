@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RoverScreen from "./Screens/RoverScreen";
 import SelectSol from "./Screens/SelectSol";
 import ImagesScreen from "./Screens/ImagesScreen";
+import APOD from "./Screens/APOD/APOD";
 export default function App() {
   const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,8 @@ export default function App() {
             headerShown: false,
           }}
         />
+
+        <Stack.Screen name="APOD" component={APOD} options={{}} />
 
         <Stack.Screen
           name="Select a Rover"
