@@ -9,12 +9,43 @@ import {
   TouchableOpacity,
   View,
   Button,
+  Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { AntDesign } from "@expo/vector-icons";
 
 const APOD = () => {
   const [pod, setPod] = useState([]);
   const [text, onChangeText] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const windowHeight = Dimensions.get("window").height;
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+    let fDate =
+      tempDate.getFullYear() +
+      "-" +
+      (tempDate.getMonth() + 1) +
+      "-" +
+      tempDate.getDate();
+    onChangeText(fDate.toString());
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
 
   useEffect(() => {
     const getPod = async () => {
@@ -45,10 +76,13 @@ const APOD = () => {
         .then((data) => {
           setPod(data);
         });
+      console.log(url);
     } catch (error) {
       setPod(null);
     }
   };
+
+  console.log(pod);
   return (
     <LinearGradient
       // Button Linear Gradient
@@ -71,15 +105,18 @@ const APOD = () => {
         {pod.thumbnail_url ? (
           <Image
             source={{ uri: `${pod.thumbnail_url}` }}
-            style={styles.podImage}
+            style={[styles.podImage, { height: windowHeight / 2 }]}
           />
         ) : (
-          <Image source={{ uri: `${pod.hdurl}` }} style={styles.podImage} />
+          <Image
+            source={{ uri: `${pod.hdurl}` }}
+            style={[styles.podImage, { height: windowHeight / 2 }]}
+          />
         )}
 
         {pod?.length !== 0 && (
           <>
-            <View>
+            <View style={styles.searchContainer}>
               <TextInput
                 style={styles.input}
                 onChangeText={onChangeText}
@@ -87,22 +124,63 @@ const APOD = () => {
                 placeholder={"YYYY-MM-MM"}
                 placeholderTextColor="lightgrey"
               />
+              <TouchableOpacity onPress={showDatepicker}>
+                <AntDesign name="calendar" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
 
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => getImage()}
-                >
-                  <Text style={styles.text}>Search</Text>
-                </TouchableOpacity>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => getImage()}
+              >
+                <Text style={styles.text}>Search</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
+            </View>
+            <View>
+              <Text
+                style={[
+                  styles.text,
+                  {
+                    textAlign: "center",
+                    fontFamily: "Michroma_400Regular",
+                    fontSize: 40,
+                    lineHeight: 50,
+                  },
+                ]}
+              >
+                {pod.title}
+              </Text>
+              <View style={{ padding: 20 }}>
+                {pod.copyright && (
+                  <Text style={styles.text}>
+                    Copyright: {"\n"}
+                    <Text style={styles.fontfam}>{pod.copyright}</Text>
+                  </Text>
+                )}
+                <Text style={styles.text}>
+                  Date: {"\n"}
+                  <Text style={styles.fontfam}>{pod.date}</Text>
+                </Text>
+                <Text style={styles.text}>
+                  Explanation: {"\n"}
+                  {pod.explanation}
+                </Text>
               </View>
             </View>
-            <Text style={[styles.text, { textAlign: "center" }]}>
-              {pod.title}
-            </Text>
-            <Text style={styles.text}>Copyright: {pod.copyright}</Text>
-            <Text style={styles.text}>Date: {pod.date}</Text>
-            <Text style={styles.text}>Explanation: {pod.explanation}</Text>
           </>
         )}
       </ScrollView>
@@ -129,13 +207,9 @@ const styles = StyleSheet.create({
     lineHeight: 30,
   },
   input: {
-    height: 50,
-    margin: 12,
-    borderWidth: 1,
     padding: 10,
     color: "white",
-    borderWidth: 1,
-    borderColor: "white",
+    width: "60%",
   },
   buttonContainer: {
     width: "100%",
@@ -148,5 +222,19 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     alignItems: "center",
     justifyContent: "center",
+    elevation: 3,
+    borderRadius: 20,
+  },
+  searchContainer: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#0b2941",
+    padding: 10,
+    marginBottom: 20,
+  },
+  fontfam: {
+    fontFamily: "Michroma_400Regular",
   },
 });

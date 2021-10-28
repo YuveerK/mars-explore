@@ -22,7 +22,19 @@ export default function App() {
           }}
         />
 
-        <Stack.Screen name="APOD" component={APOD} options={{}} />
+        <Stack.Screen
+          name="APOD"
+          component={APOD}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000108",
+            },
+            headerTintColor: "white",
+            headerTitleStyle: {
+              color: "white",
+            },
+          }}
+        />
 
         <Stack.Screen
           name="Select a Rover"

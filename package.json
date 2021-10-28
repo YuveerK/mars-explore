@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@expo-google-fonts/michroma": "^0.2.0",
+    "@react-native-community/datetimepicker": "3.5.2",
     "@react-navigation/native": "^6.0.4",
     "@react-navigation/native-stack": "^6.2.2",
     "expo": "~42.0.1",
