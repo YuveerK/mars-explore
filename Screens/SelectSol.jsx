@@ -9,21 +9,35 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
-import TypeWriter from "react-native-typewriter";
-import { AntDesign } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { useFonts, Michroma_400Regular } from "@expo-google-fonts/michroma";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { EvilIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { Octicons } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import DescriptionCard from "../components/SelectSol/DescriptionCard";
+import Slider from "@react-native-community/slider";
 
 const SelectSol = ({ route, navigation }) => {
-  const roverName = route.params.rover;
-  const solDays = route.params.solDays;
-  const roverCameras = route.params.cameras;
+  const rover = route.params.rover;
+  const roverCameras = route.params.rover.cameras;
   const [cameraName, setCameraName] = useState("");
+  let [fontsLoaded] = useFonts({
+    Michroma_400Regular,
+  });
   //state
-  const [text, onChangeText] = React.useState("Useless Text");
-  const [number, onChangeNumber] = useState(null);
-  const [click, setClick] = useState(null);
+  const [sliderSol, setSliderSol] = useState(0);
+  const [sol, setSol] = useState(0);
   const [clicked, setClicked] = useState(false);
-  const [menuClick, setMenuClick] = useState(false);
+  const [cameraClicked, setCameraClicked] = useState(null);
+  const [roverCameraClicked, setRoverCameraClicked] = useState(false);
 
   const getImage = (roverName) => {
     if (roverName === "Curiosity") {
@@ -36,118 +50,172 @@ const SelectSol = ({ route, navigation }) => {
       return require("../assets/Opportunity.jpg");
     }
     if (roverName === "Perseverance") {
-      return require("../assets/Perseverance.jpg");
+      return require("../assets/Perseverance.gif");
     }
   };
 
-  const getPictures = (index, cameraName) => {
+  const logNumber = (number) => {
+    setSliderSol(number.toFixed(0));
+  };
+  const increment = () => {
+    setSliderSol(Number(sliderSol) + 1);
+  };
+  const decrement = () => {
+    setSliderSol(Number(sliderSol) - 1);
+  };
+
+  const yesClicked = () => {
     setClicked(!clicked);
-    setClick(index);
-    setCameraName(cameraName);
   };
 
-  const toggleMenu = () => {
-    setMenuClick(!menuClick);
+  const setCameraIndex = (index) => {
+    setCameraClicked(index);
+    setRoverCameraClicked(!roverCameraClicked);
+    console.log(roverCameras[index]);
   };
+
   return (
-    <View style={{ backgroundColor: "black" }}>
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={{ width: "100%", alignItems: "center", padding: 15 }}>
-            <TypeWriter typing={1} style={styles.title}>
-              You have selected the {roverName} rover{" "}
-            </TypeWriter>
+    <LinearGradient
+      // Button Linear Gradient
+      colors={["#000108", "#03111C"]}
+      style={styles.container}
+    >
+      <KeyboardAwareScrollView style={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.container}
+          nestedScrollEnabled={true}
+        >
+          <Image source={getImage(rover.name)} style={styles.roverImage} />
+          <Text style={styles.headingText}>{rover.name} Rover</Text>
+          <View style={styles.underlineContainer}>
+            <View style={styles.underline}></View>
           </View>
-          <Image style={styles.rover} source={getImage(roverName)} />
-
-          <View style={styles.avoid}>
-            <View style={styles.headingsContainer}>
-              <Text style={styles.headings}>Sol Details</Text>
-            </View>
-            <Text style={styles.rootTextStyles}>
-              Please Select a sol day from 0 to {solDays}
-            </Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeNumber}
-              value={number}
-              placeholder="Enter Sol Day..."
-              placeholderTextColor={"white"}
-              keyboardType="numeric"
+          <View style={styles.textContainer}>
+            <DescriptionCard
+              icon={<EvilIcons name="camera" size={40} color="white" />}
+              heading={"Cameras"}
+              number={rover.cameras.length}
+            />
+            <DescriptionCard
+              icon={
+                <MaterialCommunityIcons
+                  name="rocket-outline"
+                  size={30}
+                  color="white"
+                />
+              }
+              heading={"Landing"}
+              number={rover.landing_date}
+            />
+            <DescriptionCard
+              icon={
+                <MaterialCommunityIcons
+                  name="rocket-launch-outline"
+                  size={30}
+                  color="white"
+                />
+              }
+              heading={"Launch"}
+              number={rover.launch_date}
+            />
+            <DescriptionCard
+              icon={<Fontisto name="date" size={30} color="white" />}
+              heading={"Last Date"}
+              number={rover.max_date}
+            />
+            <DescriptionCard
+              icon={
+                <Ionicons name="md-today-outline" size={30} color="white" />
+              }
+              heading={"Max Sol"}
+              number={rover.max_sol}
+            />
+            <DescriptionCard
+              icon={<FontAwesome name="photo" size={30} color="white" />}
+              heading={"Photos"}
+              number={rover.total_photos}
             />
           </View>
 
-          <View style={styles.cameraContainer}>
-            <TouchableOpacity
-              onPress={() => toggleMenu()}
-              style={styles.cameraHeadingsContainer}
-            >
-              <View>
-                <Text style={styles.headings}>Camera Details</Text>
-                <Text style={{ marginLeft: 15, color: "white" }}>
-                  Please select a camera (Optional)
-                </Text>
-              </View>
-              <View>
-                {menuClick === false ? (
-                  <AntDesign
-                    name="down"
-                    size={24}
-                    color="white"
-                    style={{ marginRight: 15 }}
-                  />
+          <View style={styles.searchContainer}>
+            <Text style={[styles.headingText, { fontSize: 20 }]}>
+              Sol {sliderSol} of {rover.max_sol}
+            </Text>
+            <View style={styles.row}>
+              <TouchableOpacity onPress={() => decrement()}>
+                <FontAwesome name="minus-square-o" size={24} color="white" />
+              </TouchableOpacity>
+              <Slider
+                style={{
+                  width: Dimensions.get("screen").width - 100,
+                  height: 40,
+                  borderWidth: 10,
+                }}
+                minimumValue={0}
+                maximumValue={rover.max_sol}
+                minimumTrackTintColor="#FFFFFF"
+                maximumTrackTintColor="#ffffff"
+                onValueChange={(number) => logNumber(number)}
+                value={sliderSol}
+              />
+              <TouchableOpacity onPress={() => increment()}>
+                <Octicons name="diff-added" size={24} color="white" />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.viewCamerasContainer}>
+              <TouchableOpacity
+                onPress={() => yesClicked()}
+                style={styles.SelectCameraRow}
+              >
+                <Text style={styles.text}>Select Camera (Optional)</Text>
+                {clicked === true ? (
+                  <>
+                    <FontAwesome
+                      name="minus-square-o"
+                      size={24}
+                      color="white"
+                    />
+                  </>
                 ) : (
-                  <AntDesign
-                    name="up"
-                    size={24}
-                    color="black"
-                    color="white"
-                    style={{ marginRight: 15 }}
-                  />
+                  <Octicons name="diff-added" size={24} color="white" />
                 )}
+              </TouchableOpacity>
+              <View style={styles.listContainer}>
+                <ScrollView nestedScrollEnabled={true}>
+                  {clicked === true &&
+                    roverCameras.map((camera, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        style={styles.listItem}
+                        onPress={() => setCameraIndex(index)}
+                      >
+                        <Text style={[styles.text, { width: "80%" }]}>
+                          {index + 1}. {camera.full_name}
+                        </Text>
+                        {cameraClicked === index &&
+                        roverCameraClicked === true ? (
+                          <FontAwesome5
+                            name="check-circle"
+                            size={24}
+                            color="white"
+                          />
+                        ) : (
+                          <Entypo
+                            name="chevron-small-right"
+                            size={24}
+                            color="white"
+                          />
+                        )}
+                      </TouchableOpacity>
+                    ))}
+                </ScrollView>
               </View>
-            </TouchableOpacity>
-
-            {menuClick && (
-              <View style={styles.cameras}>
-                {roverCameras.map((camera, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => getPictures(index, camera.name)}
-                    style={
-                      click === index && clicked
-                        ? styles.cameraContentClicked
-                        : styles.cameraContentUnclicked
-                    }
-                  >
-                    <Text style={styles.rootTextStyles}>
-                      {camera.full_name}
-                    </Text>
-                    <Text style={styles.rootTextStyles}>{camera.name}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
+            </View>
           </View>
-        </View>
-      </ScrollView>
-
-      {number != "" && number != null && (
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => {
-            navigation.navigate("View Images", {
-              solDays: number,
-              camera: cameraName,
-              roverName: roverName,
-              clicked: clicked,
-            });
-          }}
-        >
-          <Text style={{ color: "white", fontSize: 25 }}>View Images</Text>
-        </TouchableOpacity>
-      )}
-    </View>
+        </ScrollView>
+      </KeyboardAwareScrollView>
+    </LinearGradient>
   );
 };
 
@@ -156,96 +224,94 @@ export default SelectSol;
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "100%",
-    padding: 15,
-  },
-  btn: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-
-    backgroundColor: "#00493d",
-    padding: 10,
-    position: "absolute",
-    bottom: 0,
-  },
-  cameraContainer: {
-    width: "100%",
-    borderColor: "#00493d",
-    borderWidth: 5,
-    marginBottom: 100,
-  },
-  cameraHeadingsContainer: {
-    width: "100%",
-    paddingVertical: 20,
-    borderBottomColor: "#00493d",
-    borderBottomWidth: 2,
-    backgroundColor: "rgba(0, 73, 61, 0.4)",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  cameraHeadings: {
-    width: "100%",
-    backgroundColor: "yellow",
-  },
-  headingsContainer: {
-    marginBottom: 15,
-  },
-  headings: {
-    fontSize: 40,
-    color: "white",
-    marginLeft: 15,
-  },
-  cameras: {
-    width: "100%",
-    flexWrap: "wrap",
-    padding: 15,
-  },
-  cameraContentUnclicked: {
-    width: "100%",
-    padding: 25,
-    borderColor: "#00493d",
-    borderWidth: 2,
-    marginVertical: 15,
-    backgroundColor: "rgba(0, 73, 61, 0.2)",
-  },
-
-  cameraContentClicked: {
-    width: "100%",
-    padding: 25,
-    borderColor: "#00493d",
-    borderWidth: 10,
-    marginVertical: 15,
-    backgroundColor: "rgba(0, 73, 61, 0.2)",
-  },
-  avoid: {},
-  input: {
-    height: 40,
-    marginVertical: 20,
-    width: "100%",
-    borderWidth: 1,
-    padding: 10,
-    color: "white",
-    borderColor: "white",
-  },
-  rootTextStyles: {
-    color: "white",
-  },
-  image: {
-    width: "100%",
     flex: 1,
-    resizeMode: "contain",
-    position: "relative",
   },
-  rover: {
+  headingText: {
+    fontFamily: "Michroma_400Regular",
+    fontSize: 30,
+    color: "white",
+    textAlign: "center",
+  },
+
+  text: {
+    fontSize: 10,
+    color: "white",
+    marginBottom: 5,
+    fontFamily: "Michroma_400Regular",
+  },
+  roverImage: {
+    width: Dimensions.get("screen").width,
+    height: Dimensions.get("screen").height / 2 + 80,
+    resizeMode: "cover",
+  },
+  textContainer: {
     width: "100%",
-    height: 400,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    flexWrap: "wrap",
+  },
+
+  textNumber: {
+    fontSize: 15,
+    color: "white",
+    fontWeight: "bold",
+  },
+  underlineContainer: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 20,
   },
-  title: {
-    color: "white",
-    fontSize: 20,
+  underline: {
+    width: "60%",
+    height: 1,
+    marginTop: 5,
+    backgroundColor: "lightgrey",
+  },
+  searchContainer: {
+    marginTop: 20,
+    width: "100%",
+    padding: 15,
+  },
+  track: {
+    height: 80,
+    borderBottomRightRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  row: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    padding: 10,
+  },
+  viewCamerasContainer: {},
+  SelectCameraRow: {
+    width: "100%",
+    backgroundColor: "#0c293f",
+    padding: 14,
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 30,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  listContainer: {
+    width: "100%",
+    height: 300,
+    backgroundColor: "#0d202e",
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  listItem: {
+    width: "100%",
+    padding: 20,
+    marginBottom: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });

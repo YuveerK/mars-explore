@@ -45,74 +45,9 @@ const ImagesScreen = ({ route, navigation }) => {
   };
   console.log(images);
   return (
-    <ImageBackground source={require("../assets/bg.jpg")} style={styles.image}>
-      <View style={styles.feed}>
-        {images?.length > 0 && (
-          <FlatList
-            data={images}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <View
-                style={{
-                  width: "100%",
-                  backgroundColor: "rgba(0, 73, 61, 0.4)",
-
-                  marginVertical: 15,
-                }}
-              >
-                <Image
-                  style={styles.tinyLogo}
-                  source={{
-                    uri: item.img_src,
-                  }}
-                />
-                <View style={styles.infoContainer}>
-                  <View style={{ flexDirection: "row" }}>
-                    <Text style={styles.rootTextHeading}>Earth Date:</Text>
-                    <Text style={styles.rootTextContent}>
-                      {item.earth_date}
-                    </Text>
-                  </View>
-
-                  <View style={{ flexDirection: "row" }}>
-                    <Text style={styles.rootTextHeading}>Camera Name:</Text>
-                    <Text style={styles.rootTextContent}>
-                      {item.camera.full_name}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            )}
-          />
-        )}
-      </View>
-      {images === null ? (
-        <View
-          style={{ width: "100%", height: "100%", backgroundColor: "black" }}
-        >
-          <Text style={{ color: "white", fontSize: 60 }}>Loading</Text>
-        </View>
-      ) : (
-        <View
-          style={{ width: "100%", height: "100%", backgroundColor: "black" }}
-        >
-          <Image
-            source={require("../assets/error.png")}
-            style={{ width: "100%", height: 400 }}
-          />
-          <Text
-            style={{
-              color: "white",
-              width: "100%",
-              textAlign: "center",
-              fontSize: 30,
-            }}
-          >
-            Could not find any images. Please select a different camera
-          </Text>
-        </View>
-      )}
-    </ImageBackground>
+    <View >
+      <Text>Images Screen</Text>
+    </View>
   );
 };
 

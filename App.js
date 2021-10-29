@@ -41,7 +41,7 @@ export default function App() {
           component={RoverScreen}
           options={{
             headerStyle: {
-              backgroundColor: "rgba(0, 73, 61, 1)",
+              backgroundColor: "#000108",
             },
             headerTintColor: "white",
             headerTitleStyle: {
@@ -55,7 +55,7 @@ export default function App() {
           component={SelectSol}
           options={{
             headerStyle: {
-              backgroundColor: "rgba(0, 73, 61, 1)",
+              backgroundColor: "#000108",
             },
             headerTintColor: "white",
             headerTitleStyle: {
