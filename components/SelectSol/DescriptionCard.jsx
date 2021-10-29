@@ -27,9 +27,9 @@ const styles = StyleSheet.create({
     height: 100,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
     margin: 15,
-    borderColor: "lightgrey",
+    // borderWidth: 1,
+    // borderColor: "lightgrey",
     borderRadius: 10,
   },
   cardRow: {

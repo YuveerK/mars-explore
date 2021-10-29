@@ -69,7 +69,7 @@ export default function App() {
           component={ImagesScreen}
           options={{
             headerStyle: {
-              backgroundColor: "rgba(0, 73, 61, 1)",
+              backgroundColor: "#000108",
             },
             headerTintColor: "white",
             headerTitleStyle: {

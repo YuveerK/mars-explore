@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -28,7 +28,6 @@ import Slider from "@react-native-community/slider";
 const SelectSol = ({ route, navigation }) => {
   const rover = route.params.rover;
   const roverCameras = route.params.rover.cameras;
-  const [cameraName, setCameraName] = useState("");
   let [fontsLoaded] = useFonts({
     Michroma_400Regular,
   });
@@ -38,7 +37,8 @@ const SelectSol = ({ route, navigation }) => {
   const [clicked, setClicked] = useState(false);
   const [cameraClicked, setCameraClicked] = useState(null);
   const [roverCameraClicked, setRoverCameraClicked] = useState(false);
-
+  const [cameraNamePage, setCameraNamePage] = useState(null);
+  const [image, setImage] = useState(null);
   const getImage = (roverName) => {
     if (roverName === "Curiosity") {
       return require("../assets/Curiosity.jpg");
@@ -71,7 +71,11 @@ const SelectSol = ({ route, navigation }) => {
   const setCameraIndex = (index) => {
     setCameraClicked(index);
     setRoverCameraClicked(!roverCameraClicked);
-    console.log(roverCameras[index]);
+    if (roverCameraClicked === true) {
+      setCameraNamePage(null);
+    } else {
+      setCameraNamePage(roverCameras[index].name);
+    }
   };
 
   return (
@@ -181,7 +185,13 @@ const SelectSol = ({ route, navigation }) => {
                   <Octicons name="diff-added" size={24} color="white" />
                 )}
               </TouchableOpacity>
-              <View style={styles.listContainer}>
+              <View
+                style={
+                  clicked === false
+                    ? styles.listContainer1
+                    : styles.listContainer2
+                }
+              >
                 <ScrollView nestedScrollEnabled={true}>
                   {clicked === true &&
                     roverCameras.map((camera, index) => (
@@ -211,6 +221,19 @@ const SelectSol = ({ route, navigation }) => {
                     ))}
                 </ScrollView>
               </View>
+
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("View Images", {
+                    solDays: sliderSol,
+                    roverCamera: cameraNamePage,
+                    roverName: rover.name,
+                  })
+                }
+                style={{ marginBottom: 80, marginTop: 40 }}
+              >
+                <Text style={styles.headingText}>View Images</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -299,7 +322,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
-  listContainer: {
+  listContainer1: {
+    width: "100%",
+    backgroundColor: "#0d202e",
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  listContainer2: {
     width: "100%",
     height: 300,
     backgroundColor: "#0d202e",
