@@ -68,6 +68,26 @@ const ImagesScreen = ({ route, navigation }) => {
   console.log(images);
   console.log(ImageURL);
 
+  renderItem = ({ item }) => (
+    <View style={styles.imageView}>
+      <View style={styles.imageViewHeader}>
+        <View style={styles.row}>
+          <Image
+            source={getImage(roverName)}
+            style={[styles.image, { width: 30, height: 30, borderRadius: 50 }]}
+          />
+
+          <Text style={[styles.text, { marginLeft: 20 }]}>{roverName}</Text>
+        </View>
+      </View>
+      <Image source={{ uri: `${item.img_src}` }} style={styles.image} />
+      <View style={styles.imageViewFooter}>
+        <Text style={styles.text}>Sol: {item.sol}</Text>
+        <Text style={styles.text}>{item.camera.full_name}</Text>
+      </View>
+    </View>
+  );
+
   return (
     <LinearGradient
       // Button Linear Gradient
@@ -98,30 +118,8 @@ const ImagesScreen = ({ route, navigation }) => {
       <FlatList
         data={images}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.imageView}>
-            <View style={styles.imageViewHeader}>
-              <View style={styles.row}>
-                <Image
-                  source={getImage(roverName)}
-                  style={[
-                    styles.image,
-                    { width: 30, height: 30, borderRadius: 50 },
-                  ]}
-                />
-
-                <Text style={[styles.text, { marginLeft: 20 }]}>
-                  {roverName}
-                </Text>
-              </View>
-            </View>
-            <Image source={{ uri: `${item.img_src}` }} style={styles.image} />
-            <View style={styles.imageViewFooter}>
-              <Text style={styles.text}>Sol: {item.sol}</Text>
-              <Text style={styles.text}>{item.camera.full_name}</Text>
-            </View>
-          </View>
-        )}
+        renderItem={renderItem}
+        initialNumToRender={20}
       />
     </LinearGradient>
   );

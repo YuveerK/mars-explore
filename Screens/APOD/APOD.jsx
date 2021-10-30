@@ -109,7 +109,7 @@ const APOD = () => {
           />
         ) : (
           <Image
-            source={{ uri: `${pod.hdurl}` }}
+            source={{ uri: `${pod.url}` }}
             style={[styles.podImage, { height: windowHeight / 2 }]}
           />
         )}

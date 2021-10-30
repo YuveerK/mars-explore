@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Pressable,
+  ScrollView,
 } from "react-native";
 import { useFonts, Michroma_400Regular } from "@expo-google-fonts/michroma";
 import { LinearGradient } from "expo-linear-gradient";
@@ -27,44 +28,51 @@ const LandingScreen = ({ navigation }) => {
         colors={["#000108", "#03111C"]}
         style={styles.container}
       >
-        <StatusBar barStyle="light-content" hidden={false} translucent={true} />
+        <ScrollView>
+          <View style={styles.container}>
+            <StatusBar
+              barStyle="light-content"
+              hidden={false}
+              translucent={true}
+            />
+            <Text style={styles.text}>Mars Explore</Text>
 
-        <Text style={styles.text}>Mars Explore</Text>
-
-        <View style={styles.cardContainer}>
-          <TouchableOpacity
-            style={styles.card}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("APOD")}
-          >
-            <View style={styles.cardTextHeading}>
-              <Image
-                source={require("../assets/apod.jpg")}
-                style={styles.cardImage}
-              />
-              <View style={{ position: "absolute" }}>
-                <Text style={styles.cardText}>
-                  Astronomy Picture of The Day
-                </Text>
-              </View>
+            <View style={styles.cardContainer}>
+              <TouchableOpacity
+                style={styles.card}
+                activeOpacity={0.8}
+                onPress={() => navigation.navigate("APOD")}
+              >
+                <View style={styles.cardTextHeading}>
+                  <Image
+                    source={require("../assets/apod.jpg")}
+                    style={styles.cardImage}
+                  />
+                  <View style={{ position: "absolute" }}>
+                    <Text style={styles.cardText}>
+                      Astronomy Picture of The Day
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.card}
+                activeOpacity={0.8}
+                onPress={() => navigation.navigate("Select a Rover")}
+              >
+                <View style={styles.cardTextHeading}>
+                  <Image
+                    source={require("../assets/mars.jpg")}
+                    style={styles.cardImage}
+                  />
+                  <View style={{ position: "absolute" }}>
+                    <Text style={styles.cardText}>Mars Explorer</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.card}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("Select a Rover")}
-          >
-            <View style={styles.cardTextHeading}>
-              <Image
-                source={require("../assets/mars.jpg")}
-                style={styles.cardImage}
-              />
-              <View style={{ position: "absolute" }}>
-                <Text style={styles.cardText}>Mars Explorer</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </ScrollView>
       </LinearGradient>
     );
   }
@@ -74,11 +82,8 @@ export default LandingScreen;
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
     paddingTop: StatusBar.currentHeight,
     flex: 1,
-    alignItems: "center",
   },
   cardContainer: {
     width: "100%",
@@ -102,6 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: "#fff",
     fontFamily: "Michroma_400Regular",
+    textAlign: "center",
   },
   cardText: {
     fontSize: 20,
